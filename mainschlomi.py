@@ -34,7 +34,7 @@ def koeffizienten_berechnung(all_x, all_y):
 def alle_koeffizienten(all_x, all_y, all_u_y):
     coefficients = []
     coefficients.append(koeffizienten_berechnung(all_x, all_y))
-    for i in range(100):
+    for i in range(1000000):
         new_random_y = []
         for j in range(len(all_y)):
             new_random_y.append(generate_random_y(all_y[j], all_u_y[j]))
@@ -46,14 +46,26 @@ def alle_koeffizienten(all_x, all_y, all_u_y):
 
 def histogramm(all_x, all_y, all_u_y):
     a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
-    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
+    a_1_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
 
-    plt.hist(a_0_values, bins="auto", alpha=0.5, label="a_0_koeffizienten")
-   # plt.hist(a_0_values, bins="auto", alpha=0.5, label="a_1_koeffizienten")
+    plt.hist([a_0_values, a_1_values], bins="auto", alpha=0.5, label=["a_0_koeffizienten", "a_1_koeffizienten"])
     plt.xlabel('Wert')
     plt.ylabel('Häufigkeit')
     plt.title('Histogramm a_0 und a_1')
     plt.legend()
     plt.show()
 
+def koeffizienten_analyse(all_x, all_y, all_u_y):
+    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
+    a_1_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
+
+    a0_mean = np.mean(a_0_values)
+    a0_std = np.std(a_0_values, ddof=1)  # ddof=1 → Stichproben-Standardabweichung
+
+    a1_mean = np.mean(a_1_values)
+    a1_std = np.std(a_1_values, ddof=1)
+
+    return a0_mean, a0_std, a1_mean, a1_std
+
 histogramm(all_x, all_y, all_u_y)
+a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(all_x, all_y, all_u_y)
