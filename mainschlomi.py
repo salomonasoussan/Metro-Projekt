@@ -48,11 +48,26 @@ def histogramm(all_x, all_y, all_u_y):
     a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
     a_1_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
 
-    plt.hist([a_0_values, a_1_values], bins="auto", alpha=0.5, label=["a_0_koeffizienten", "a_1_koeffizienten"])
+    a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(all_x, all_y, all_u_y)
+
+    plt.subplot(1,2,1)
+    plt.hist(a_0_values, bins="auto", density=True, alpha=0.5, label="a_0_Koeffizienten")
     plt.xlabel('Wert')
     plt.ylabel('Häufigkeit')
-    plt.title('Histogramm a_0 und a_1')
+    plt.title('Histogramm a_0')
     plt.legend()
+    plt.subplot(1, 2, 2)
+    plt.hist(a_1_values, bins="auto", density=True, alpha=0.5, label="a_1_Koeffizienten", color='orange')
+    plt.xlabel('Wert')
+    plt.ylabel('Häufigkeit')
+    plt.title('Histogramm a_1')
+    plt.legend()
+
+    plt.tight_layout()
+
+    plt.text(1, 500, f"Mittelwert von a0 = {a0_mean:.4f} ± {a0_std:.4f}", fontsize=12)
+    plt.text(1, 450, f"Mittelwert  von a1 = {a1_mean:.4f} ± {a1_std:.4f}", fontsize=12)
+
     plt.show()
 
 def koeffizienten_analyse(all_x, all_y, all_u_y):
@@ -68,4 +83,4 @@ def koeffizienten_analyse(all_x, all_y, all_u_y):
     return a0_mean, a0_std, a1_mean, a1_std
 
 histogramm(all_x, all_y, all_u_y)
-a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(all_x, all_y, all_u_y)
+
