@@ -14,7 +14,7 @@ def generate_random_y(mu, sigma):
     a = mu - (3 * sigma)
     b = mu + (3 * sigma)
 
-    m = 1/np.sqrt(2*np.pi)*sigma
+    m = 1/(np.sqrt(2*np.pi)*sigma)
 
     while(True):
         r = np.random.uniform(0, m)
@@ -34,7 +34,7 @@ def koeffizienten_berechnung(all_x, all_y):
 def alle_koeffizienten(all_x, all_y, all_u_y):
     coefficients = []
     coefficients.append(koeffizienten_berechnung(all_x, all_y))
-    for i in range(10):
+    for i in range(100):
         new_random_y = []
         for j in range(len(all_y)):
             new_random_y.append(generate_random_y(all_y[j], all_u_y[j]))
@@ -42,8 +42,18 @@ def alle_koeffizienten(all_x, all_y, all_u_y):
         new_random_y = np.array(new_random_y)
         coefficients.append(koeffizienten_berechnung(all_x, new_random_y))
 
-    return coefficients
+    return np.array(coefficients)
 
+def histogramm(all_x, all_y, all_u_y):
+    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
+    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
 
+    plt.hist(a_0_values, bins="auto", alpha=0.5, label="a_0_koeffizienten")
+   # plt.hist(a_0_values, bins="auto", alpha=0.5, label="a_1_koeffizienten")
+    plt.xlabel('Wert')
+    plt.ylabel('Häufigkeit')
+    plt.title('Histogramm a_0 und a_1')
+    plt.legend()
+    plt.show()
 
-print(alle_koeffizienten(all_x, all_y, all_u_y))
+histogramm(all_x, all_y, all_u_y)
