@@ -16,7 +16,7 @@ def generate_random_y(mu, sigma):
 
     m = 1/(np.sqrt(2*np.pi)*sigma)
 
-    while(True):
+    while True:
         r = np.random.uniform(0, m)
         x_i = np.random.uniform(a, b)
         f_x_i = function_f(x_i, mu, sigma)
