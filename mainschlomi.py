@@ -74,8 +74,8 @@ def plot_all(coefficients):
     a1_lower = a1_mean - a1_std
 
     plt.plot(x_plot, a0_mean + a1_mean * x_plot, color='red', label='Mittelwertgerade', linewidth=2)
-    plt.plot(x_plot, a0_upper + a1_upper * x_plot, color='green', linestyle='--', label='Oberes Unsicherheitsband')
-    plt.plot(x_plot, a0_lower + a1_lower * x_plot, color='blue', linestyle='--', label='Unteres Unsicherheitsband')
+    plt.plot(x_plot, a0_lower + a1_upper * x_plot, color='green', linestyle='--', label='Oberes Unsicherheitsband')
+    plt.plot(x_plot, a0_upper + a1_lower * x_plot, color='blue', linestyle='--', label='Unteres Unsicherheitsband')
     plt.errorbar(all_x, all_y, yerr=all_u_y, fmt='o', color='blue', capsize=5, label='Messwerte ± Unsicherheit')
 
     plt.xlabel("x")
