@@ -44,12 +44,13 @@ def alle_koeffizienten(all_x, all_y, all_u_y):
 
     return np.array(coefficients)
 
-def histogramm(all_x, all_y, all_u_y):
-    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
-    a_1_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
+def plot_all(coefficients):
+    a_0_values = coefficients[:,0]
+    a_1_values = coefficients[:, 1]
 
-    a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(all_x, all_y, all_u_y)
+    a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(coefficients)
 
+    plt.figure(1)
     plt.subplot(1,2,1)
     plt.hist(a_0_values, bins="auto", density=True, alpha=0.5, label="a_0_Koeffizienten")
     plt.xlabel('Wert')
@@ -65,22 +66,39 @@ def histogramm(all_x, all_y, all_u_y):
 
     plt.tight_layout()
 
-    plt.text(1, 500, f"Mittelwert von a0 = {a0_mean:.4f} ± {a0_std:.4f}", fontsize=12)
-    plt.text(1, 450, f"Mittelwert  von a1 = {a1_mean:.4f} ± {a1_std:.4f}", fontsize=12)
+    plt.figure(2)
+    x_plot = np.linspace(min(all_x)-1, max(all_x)+1, 100)
+    a0_upper = a0_mean + a0_std
+    a0_lower = a0_mean - a0_std
+    a1_upper = a1_mean + a1_std
+    a1_lower = a1_mean - a1_std
 
+    plt.plot(x_plot, a0_mean + a1_mean * x_plot, color='red', label='Mittelwertgerade', linewidth=2)
+    plt.plot(x_plot, a0_upper + a1_upper * x_plot, color='green', linestyle='--', label='Oberes Unsicherheitsband')
+    plt.plot(x_plot, a0_lower + a1_lower * x_plot, color='blue', linestyle='--', label='Unteres Unsicherheitsband')
+    plt.errorbar(all_x, all_y, yerr=all_u_y, fmt='o', color='blue', capsize=5, label='Messwerte ± Unsicherheit')
+
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.title("Monte-Carlo Simulation lineare Regression")
+    plt.legend()
     plt.show()
 
-def koeffizienten_analyse(all_x, all_y, all_u_y):
-    a_0_values = alle_koeffizienten(all_x, all_y, all_u_y)[:,0]
-    a_1_values = alle_koeffizienten(all_x, all_y, all_u_y)[:, 1]
+def koeffizienten_analyse(coefficients):
+    a_0_values = coefficients[:,0]
+    a_1_values = coefficients[:, 1]
 
     a0_mean = np.mean(a_0_values)
-    a0_std = np.std(a_0_values, ddof=1)  # ddof=1 → Stichproben-Standardabweichung
+    a0_std = np.std(a_0_values, ddof=1)
 
     a1_mean = np.mean(a_1_values)
     a1_std = np.std(a_1_values, ddof=1)
 
     return a0_mean, a0_std, a1_mean, a1_std
 
-histogramm(all_x, all_y, all_u_y)
+coefficients = alle_koeffizienten(all_x, all_y, all_u_y)
+plot_all(coefficients)
+a0_mean, a0_std, a1_mean, a1_std = koeffizienten_analyse(coefficients)
+
+print("Mittelwert a0 = ", a0_mean, " +- ", a0_std, "Mittelwert a1 = ", a1_mean, " +- ", a1_std)
 
