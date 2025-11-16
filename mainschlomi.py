@@ -27,7 +27,4 @@ def function_f(y_i, y, u_y):
     return f
 
 
-
-
-
 print(function_f(x_i, 1, 2))
